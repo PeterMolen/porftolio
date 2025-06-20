@@ -1,0 +1,12 @@
+html {
+  scroll-behavior: smooth;
+}
+
+html.dark, body.dark {
+  background-color: #121212;
+  color: #eee;
+}
+
+html.dark a {
+  color: #90caf9; /* ljusblå */
+}
