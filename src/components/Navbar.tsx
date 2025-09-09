@@ -19,7 +19,7 @@ type NavbarProps = {
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function Navbar({ darkMode, setDarkMode  }: NavbarProps) {
+export function Navbar({ darkMode, setDarkMode: _setDarkMode  }: NavbarProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
