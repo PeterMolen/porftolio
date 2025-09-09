@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { projects } from "./data/projects";
 import { ProjectCard } from "./components/ProjectCard";
 import { Navbar } from "./components/Navbar";
+import mainImg from "./assets/main4.png";
+import main2 from "./assets/main2.png";
 
 import {
   Box,
@@ -23,6 +25,17 @@ import { TypeAnimation } from "react-type-animation";
 function App() {
   // State för dark mode
   const [darkMode, setDarkMode] = useState(false);
+
+  // Nytt state för att styra vilken bild som visas i animationen
+  const [current, setCurrent] = useState("receipt");
+
+  // Bildmap
+  const images: Record<string, string> = {
+    receipt: "/images/receipt.png",
+    transcription: "/images/transcription.png",
+    ecommerce: "/images/ecommerce.png",
+    youthcentre: "/images/yc.png",
+  };
 
   // Spara dark mode i localStorage och läs initialt
   useEffect(() => {
@@ -67,7 +80,7 @@ function App() {
         main: "#ce93d8",
       },
       background: {
-        default: "#000000",
+        default: "#0A0F1C", //mörkblå
         paper: "#fff",
       },
       text: {
@@ -122,6 +135,46 @@ function App() {
           userSelect: "none",
         }}
       >
+{/* Höger bakgrundsbild */}
+{!isMobile && (
+  <Box
+    sx={{
+      position: "fixed",
+      top: 0,
+      right: 0,
+      width: { xs: "40%", md: "30%" },
+      height: "60vh",
+      backgroundImage: `url(${mainImg})`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      opacity: 1,
+      pointerEvents: "none",
+      zIndex: 0,
+    }}
+  />
+)}
+
+{/* Vänster bakgrundsbild */}
+{!isMobile && (
+  <Box
+    sx={{
+      position: "fixed",
+      top: "66%", // Vertikal mitt
+      left: 0,
+      width: { xs: "40%", md: "22%" },
+      height: "60vh", // Justera höjden efter behov
+      backgroundImage: `url(${main2})`,
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      transform: "translateY(-50%)",
+      pointerEvents: "none",
+      opacity: 1,
+      zIndex: 0,
+    }}
+  />
+)}
         <Container maxWidth="md" sx={{ mb: 16, textAlign: "center" }}>
           <Typography
             variant="h2"
@@ -137,19 +190,46 @@ function App() {
               color: "text.primary",
             }}
           >
-            🧠 My AI Portfolio
+            𖡎 My AI Portfolio 
           </Typography>
 
           <Typography
             variant="h5"
             color="text.secondary"
-            sx={{ maxWidth: 600, mx: "auto", mb: 4 }}
+            sx={{ maxWidth: 600, mx: "auto", mb: 2, fontFamily: "'Montserrat', sans-serif" }}
           >
             Cutting-edge AI projects with futuristic design and modern tech.
           </Typography>
 
-          {/* Wrapper Box med flex column för animation + knapp */}
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            sx={{ maxWidth: 600, mx: "auto", mb: 6, fontSize: 18, }}
+          >
+            Educated in C# and AI but code in any language.
+          </Typography>
+
+
+          <Typography
+            variant="overline"
+            color="text.primary"
+            sx={{ maxWidth: 600, mx: "auto", mb: 4,  fontSize: 14,  }}
+          >
+            My projects: 
+          </Typography>
+
+            <Typography
+            variant="overline"
+            color="text.primary"
+            sx={{ maxWidth: 600, mx: "auto", mb: 4,  fontSize: 13,  }}
+          >
+           🡻
+          </Typography>   
+          
+
+          {/* Ny animation med bilder */}
           <Box
+          
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -164,20 +244,59 @@ function App() {
               userSelect: "none",
             }}
           >
-            {/* Animated text utan box */}
+            {/* Dold text som styr animationen */}
             <TypeAnimation
               sequence={[
-                "AI-receipt-analys",
                 2000,
-                "AI-transcription & Editor tool",
+                () => setCurrent("youthcentre"), 
                 2000,
-                "E-commerce + AI chatbot",
+                () => setCurrent("ecommerce"),
                 2000,
+                () => setCurrent("transcription"),
+                2000,
+                () => setCurrent("receipt"),
               ]}
-              wrapper="span"
-              speed={45}
               repeat={Infinity}
+              speed={1}
+              cursor={false}
+              preRenderFirstString
+              wrapper="span"
+              style={{ display: "none" }}
             />
+
+            {/* Bild visas istället för text */}
+<img
+  src={images[current]}
+  alt={current}
+  style={{
+    width: 200,
+    height: "auto",
+    marginTop: "12px",
+    borderRadius: 18,
+    border: `3px solid ${
+      darkMode ? "rgba(206,147,216,0.6)" : "rgba(106,27,154,0.4)"
+    }`,
+    boxShadow: darkMode
+      ? "0 8px 20px rgba(206, 147, 216, 0.4), inset 0 0 15px rgba(206,147,216,0.2)"
+      : "0 8px 20px rgba(106, 27, 154, 0.3), inset 0 0 15px rgba(106,27,154,0.15)",
+    transition: "transform 0.35s ease, box-shadow 0.35s ease",
+    cursor: "default",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-6px) scale(1.05)";
+    e.currentTarget.style.boxShadow = darkMode
+      ? "0 12px 28px rgba(206, 147, 216, 0.7), inset 0 0 20px rgba(206,147,216,0.3)"
+      : "0 12px 28px rgba(106, 27, 154, 0.6), inset 0 0 20px rgba(106,27,154,0.25)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "translateY(0px) scale(1)";
+    e.currentTarget.style.boxShadow = darkMode
+      ? "0 8px 20px rgba(206, 147, 216, 0.4), inset 0 0 15px rgba(206,147,216,0.2)"
+      : "0 8px 20px rgba(106, 27, 154, 0.3), inset 0 0 15px rgba(106,27,154,0.15)";
+  }}
+/>
+
+          
 
             {/* Knapp under animationen */}
             <Button
@@ -185,7 +304,13 @@ function App() {
               color="primary"
               href="#projects"
               size="large"
-              sx={{ px: 5, py: 1.5, fontWeight: 600, boxShadow: 3, width: "100%" }}
+              sx={{
+                px: 5,
+                py: 1.5,
+                fontWeight: 600,
+                boxShadow: 3,
+                width: "100%",
+              }}
             >
               Explore Projects
             </Button>
@@ -199,7 +324,7 @@ function App() {
               flexDirection: "column",
               gap: 4,
               width: "100%",
-              maxWidth: "1200px",
+              maxWidth: "900px",
               mx: "auto",
             }}
           >
@@ -222,7 +347,7 @@ function App() {
             userSelect: "none",
           }}
         >
-          &copy; 2025 Peter’s AI Portfolio. All rights reserved.
+          &copy; 2025 Peter’s AI Portfolio. All rights reserved. 
           <br />
           Contact me at:{" "}
           <a
@@ -231,6 +356,8 @@ function App() {
           >
             pmolen.swe@gmail.com
           </a>
+          <br />
+          𝄃𝄃𝄂𝄂𝄀𝄁𝄃𝄂𝄂𝄃
         </Box>
       </Box>
     </ThemeProvider>
