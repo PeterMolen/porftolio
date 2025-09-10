@@ -217,14 +217,7 @@ function App() {
           >
             My projects: 
           </Typography>
-
-            <Typography
-            variant="overline"
-            color="text.primary"
-            sx={{ maxWidth: 600, mx: "auto", mb: 4,  fontSize: 13,  }}
-          >
-           🡻
-          </Typography>   
+  
           
 
           {/* Ny animation med bilder */}

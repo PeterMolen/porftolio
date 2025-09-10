@@ -19,11 +19,23 @@ type NavbarProps = {
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function Navbar({ darkMode, setDarkMode: _setDarkMode  }: NavbarProps) {
+export function Navbar({ darkMode, setDarkMode: _setDarkMode }: NavbarProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [showScrollTop, setShowScrollTop] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 200); // visas efter 200px scroll
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMenuAnchorEl(event.currentTarget);
@@ -41,7 +53,9 @@ export function Navbar({ darkMode, setDarkMode: _setDarkMode  }: NavbarProps) {
   const menuItems = [
     { label: "Projects", href: "#projects" },
     { label: "Contact", href: "#contact" },
-    { label: <ArrowUpwardIcon />, action: scrollToTop },
+    ...(showScrollTop
+      ? [{ label: <ArrowUpwardIcon />, action: scrollToTop }]
+      : []),
   ];
 
   if (!isMobile) return null;
@@ -125,7 +139,7 @@ export function Navbar({ darkMode, setDarkMode: _setDarkMode  }: NavbarProps) {
                   alignItems: "center",
                   width: "100%",
                   textAlign: "center",
-                  color: (theme) => theme.palette.primary.main,
+                  color: theme.palette.primary.main,
                   ...(isArrowIcon && {
                     gap: 0,
                     paddingLeft: 0,
@@ -137,7 +151,16 @@ export function Navbar({ darkMode, setDarkMode: _setDarkMode  }: NavbarProps) {
                   },
                 }}
               >
-                {label}
+                {isArrowIcon ? (
+                  <ArrowUpwardIcon
+                    sx={{
+                      fontSize: 30, // större
+                      color: "#1976d2 !important"
+                    }}
+                  />
+                ) : (
+                  label
+                )}
               </MenuItem>
             );
           })}
