@@ -10,6 +10,41 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+    {
+  title: "AI-powered Customer Support System (upcoming)",
+  description: "An AI-driven full-stack customer support platform to automate FAQs, classify tickets, and escalate complex issues to human agents.",
+  coreFeatures: [
+    "✅ Automated FAQ responses trained on company knowledge base",
+    "✅ Ticket classification (billing, technical, product, complaints)",
+    "✅ Escalation system with AI confidence scoring",
+    "✅ Dashboard for support team to manage tickets & AI suggestions",
+    "✅ User role-based access (admin, support agent)",
+    "✅ Logs & history of AI and human responses",
+    "✅ Analytics & insights on ticket trends",
+    "✅ Multi-channel integration (Email, Chat, Slack, WhatsApp)",
+    "✅ Continuous learning loop from human edits"
+  ],
+  tech: [
+    "Python (Flask / FastAPI for backend AI API)",
+    "Javascript (Next.js) + React (frontend)",
+    "LLM ((Large Language Models)",
+    "NLP Natural Language Processing.",
+    "Data Import via CSV/JSON",
+    "Tailwind CSS, Daisy",
+    "MongoDB + Mongoose",
+    "JWT Authentication & role-based access control",
+    "Socket.io (for live chat integration)",
+    "Recharts (analytics & dashboards)",
+    "REST API routes",
+    "OOP structure",
+    "Edit chat theme your self",
+    "Admin panel for managing FAQ, settings"
+  ],
+  // videoUrl: "/assets/support-bot-demo.mp4",
+  // youtubeId: "GamgzJs4tzo",
+  // sourceCode: "Ask"
+},
+
   {
       title: "🏫 Youth Centre App + AI stats + AI Chatbot",
       description: "A full-stack youth centre web application",

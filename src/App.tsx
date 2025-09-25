@@ -35,6 +35,7 @@ function App() {
     transcription: "/images/transcription.png",
     ecommerce: "/images/ecommerce.png",
     youthcentre: "/images/yc.png",
+    aicss: "/images/aicss.png"
   };
 
   // Spara dark mode i localStorage och läs initialt
@@ -248,6 +249,9 @@ function App() {
                 () => setCurrent("transcription"),
                 2000,
                 () => setCurrent("receipt"),
+                2000,
+                () => setCurrent("aicss"),
+                
               ]}
               repeat={Infinity}
               speed={1}
