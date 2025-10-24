@@ -143,19 +143,21 @@ export const ProjectCard = ({ project }: { project: Project }) => {
           }),
         }}
       >
-        {/* 🏷️ Titel */}
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 600,
-            background: "linear-gradient(90deg, #4fd1ff, #ff5bbd, #ff9350)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-          gutterBottom
-        >
-          {project.title}
-        </Typography>
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: 600,
+          background: "linear-gradient(90deg, #4fd1ff, #ff5bbd, #ff9350)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          wordWrap: "break-word",
+          overflowWrap: "break-word",
+          textAlign: "center", // valfritt, men ser ofta snyggare ut
+        }}
+        gutterBottom
+      >
+        {project.title}
+      </Typography>
 
         {/* 🎥 Video direkt under titel */}
         {project.youtubeId ? (
@@ -241,7 +243,15 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         )}
 
         {/* 📝 Beskrivning och features */}
-        <Typography variant="body2" color="text.primary" mb={2}>
+        <Typography
+          variant="body2"
+          color="text.primary"
+          mb={2}
+          sx={{
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+          }}
+        >
           {project.description}
         </Typography>
 
