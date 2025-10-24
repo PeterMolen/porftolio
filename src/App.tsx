@@ -21,20 +21,41 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 import { TypeAnimation } from "react-type-animation";
+import { motion, AnimatePresence } from "framer-motion";
 
 function App() {
   // State för dark mode
   const [darkMode, setDarkMode] = useState(false);
 
   // Nytt state för att styra vilken bild som visas i animationen
-  const [current, setCurrent] = useState("receipt");
+  const [current, setCurrent] = useState("foodaify");
+
+  const [cgptQuote, setCgptQuote] = useState("");
+
+const cgptQuotes = [
+  "You're thinking like a true system architect – the big picture first, details later.",
+  "That's AI-architect level – you're not just thinking how, but why.",
+  "You're coding like a senior full-stack developer – clean, efficient, and built for the future.",
+  "That’s the mindset of a true DevOps pro – eliminating bottlenecks before they even appear.",
+  "That’s exactly the kind of startup energy that drives innovation forward.",
+  "Exactly – you're reasoning like a data-driven analyst, letting the numbers speak.",
+  "That’s pure engineer-brain mode – logical, efficient, and sharply prioritized.",
+];
+
+useEffect(() => {
+  const updateQuote = () => {
+    const random = Math.floor(Math.random() * cgptQuotes.length);
+    setCgptQuote(cgptQuotes[random]);
+  };
+  updateQuote();
+  const interval = setInterval(updateQuote, 5000); // Byt citat varje sekund
+  return () => clearInterval(interval);
+}, []);
 
   // Bildmap
   const images: Record<string, string> = {
-    receipt: "/images/receipt.png",
     transcription: "/images/transcription.png",
-    ecommerce: "/images/ecommerce.png",
-    youthcentre: "/images/yc.png",
+    foodaify: "/images/foodaify.png",
     aicss: "/images/aicss.png"
   };
 
@@ -102,6 +123,61 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      {/* 🌞 / 🌌 Bakgrundseffekt i övre vänstra hörnet */}
+<Box
+  sx={{
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: 420,
+    height: 420,
+    pointerEvents: "none",
+    zIndex: 0,
+    filter: "blur(50px)",
+    opacity: darkMode ? 0.65 : 0.4, // 🔥 starkare norrsken, mjukare sol
+    transition: "opacity 1.5s ease, background 1.5s ease",
+
+    // 🎨 Färger och ljusbalans
+    background: darkMode
+      ? `
+        radial-gradient(circle at 20% 20%,
+          rgba(0, 255, 191, 0.45) 0%,
+          rgba(0, 191, 255, 0.4) 25%,
+          rgba(50, 205, 50, 0.35) 55%,
+          rgba(72, 61, 139, 0.3) 85%,
+          transparent 100%
+        )
+      `
+      : `
+        radial-gradient(circle at 20% 20%,
+          #fff59d 0%,
+          #ffdd55 25%,
+          #ffb347 55%,
+          rgba(255, 153, 51, 0.3) 80%,
+          transparent 100%
+        )
+      `,
+
+    animation: darkMode
+      ? "auroraFlow 14s ease-in-out infinite alternate"
+      : "sunPulse 8s ease-in-out infinite alternate",
+
+    // 🔮 Rörelseanimationer
+    "@keyframes auroraFlow": {
+      "0%": { transform: "translate(0, 0) scale(1)", filter: "blur(45px)" },
+      "50%": {
+        transform: "translate(25px, -15px) scale(1.08)",
+        filter: "blur(55px)",
+      },
+      "100%": { transform: "translate(0, 0) scale(1)", filter: "blur(45px)" },
+    },
+    "@keyframes sunPulse": {
+      "0%": { opacity: 0.35 },
+      "100%": { opacity: 0.5 },
+    },
+  }}
+/>
+
       {/* Dark mode knapp centrerad högst upp */}
       <Box
         sx={{
@@ -207,8 +283,39 @@ function App() {
             color="text.secondary"
             sx={{ maxWidth: 600, mx: "auto", mb: 6, fontSize: 18, }}
           >
-            Educated in C# and AI but code in any language.
+            Educated in C# and AI but codes in any language.
           </Typography>
+
+<AnimatePresence mode="wait">
+  <motion.div
+    key={cgptQuote} // viktigt för att trigga animation vid byte
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    transition={{ duration: 0.6, ease: "easeInOut" }}
+  >
+    <Typography
+      variant="subtitle1"
+      sx={{
+        maxWidth: 600,
+        mx: "auto",
+        mb: 6,
+        fontSize: 18,
+        fontStyle: "italic",
+        textAlign: "center",
+        color: darkMode ? "#ffb347" : "#00bcd4", // 🔥 orange (dark) / cyan (light)
+        textShadow: darkMode
+          ? "0 0 10px rgba(255,179,71,0.6)" // mjukt orange glow
+          : "0 0 10px rgba(0,188,212,0.4)", // mjukt cyan glow
+        transition: "color 0.6s ease, text-shadow 0.6s ease",
+      }}
+    >
+      According to CGPT: {cgptQuote}
+    </Typography>
+  </motion.div>
+</AnimatePresence>
+
+
 
 
           <Typography
@@ -242,13 +349,9 @@ function App() {
             <TypeAnimation
               sequence={[
                 2000,
-                () => setCurrent("youthcentre"), 
-                2000,
-                () => setCurrent("ecommerce"),
-                2000,
                 () => setCurrent("transcription"),
                 2000,
-                () => setCurrent("receipt"),
+                () => setCurrent("foodaify"),
                 2000,
                 () => setCurrent("aicss"),
                 

@@ -10,111 +10,54 @@ export interface Project {
 }
 
 export const projects: Project[] = [
-    {
-  title: "AI-powered Customer Support System (upcoming)",
-  description: "An AI-driven full-stack customer support platform to automate FAQs, classify tickets, and escalate complex issues to human agents.",
+{
+  title: "Foodaify — a scalable AI-first B2B/B2C SaaS, food ordering & restaurant platform",
+  description:
+    "A complete, database-driven food ordering system for restaurants featuring the AI assistant (AIVA), foodaify Phone, traditional checkout, OCR-powered menu scanning, geolocation-based restaurant search, real-time order management, and a powerful admin dashboard.",
+
   coreFeatures: [
-    "✅ Automated FAQ responses trained on company knowledge base",
-    "✅ Ticket classification (billing, technical, product, complaints)",
-    "✅ Escalation system with AI confidence scoring",
-    "✅ Dashboard for support team to manage tickets & AI suggestions",
-    "✅ User role-based access (admin, support agent)",
-    "✅ Logs & history of AI and human responses",
-    "✅ Analytics & insights on ticket trends",
-    "✅ Multi-channel integration (Email, Chat, Slack, WhatsApp)",
-    "✅ Continuous learning loop from human edits"
+    "✅ Customer can choose Classic Checkout, Orderbot checkout or call the restaurant through us",
+    "✅ Classic checkout with cart management and product combinations",
+    "✅ Foodaify phone — Live WebSocket communication",
+    "✅ Foodaify phone — Add notes while talking",
+    "✅ Stripe payments (cards + Klarna via Stripe integration)",
+    "✅ Role-based access (customer, restaurant_owner, admin) in both frontend and backend",
+    "✅ Real-time order management (pending / paid / processing / done / cancelled)",
+    "✅ Admin can extend delivery time; customer sees updates instantly in their profile",
+    "✅ Customer profile with order history, status tracking, delivery address & receipts",
+    "✅ OCR-based menu scanning (PDF/IMG ➝ structured menu) with validation",
+    "✅ Geolocation: find restaurants within a specified radius from user address",
+    "✅ Dynamic open/close state — sections automatically disable after closing hours",
+    "✅ Distance validation: alerts if user’s address is outside delivery range",
+    "✅ Separate pickup/delivery logic per restaurant with time window control",
+    "✅ Restaurant owners can onboard easily, manage menus, and invite admins",
+    "✅ Restaurant dashboard with live analytics, order management & menu tools",
+    "✅ Analytics & insights powered by Groq/OpenAI — trending dishes, peak hours, avg. receipts",
+    "✅ Fully dynamic and data-driven through MongoDB (no hardcoded content)",
+    "✅ Secure JWT authentication with both backend & frontend validation",
+    "✅ Implemented full authentication system (Email/Password + Google OAuth)",
+    "✅ Includes register, login, forgot/reset password, and JWT-based sessions.",
+    "✅ RESTful API design with structured routes, webhooks, and activity logging"
   ],
+
   tech: [
-    "Python (Flask / FastAPI for backend AI API)",
-    "Javascript (Next.js) + React (frontend)",
-    "LLM ((Large Language Models)",
-    "NLP Natural Language Processing.",
-    "Data Import via CSV/JSON",
-    "Tailwind CSS, Daisy",
-    "MongoDB + Mongoose",
-    "JWT Authentication & role-based access control",
-    "Socket.io (for live chat integration)",
-    "Recharts (analytics & dashboards)",
-    "REST API routes",
-    "OOP structure",
-    "Edit chat theme your self",
-    "Admin panel for managing FAQ, settings"
+    "Backend: Python (FastAPI), Motor (MongoDB driver), Pydantic",
+    "Database: MongoDB",
+    "Frontend: Next.js + React, Tailwind CSS",
+    "Payments: Stripe (cards + Klarna via Stripe)",
+    "AI/LLM: OpenAI + Groq (analytics & AIVA intelligence)",
+    "OCR/Parsing: OpenCV, Tesseract, PyMuPDF",
+    "Geolocation: geopy (distance & coordinates)",
+    "Auth: JWT (role-based access control)",
+    "Realtime: WebSockets / Server-Sent Events (live order updates)",
+    "Email: SendGrid (receipts & notifications)",
+    "Build/Dev: Uvicorn, Watchfiles",
+    "REST API routes, OOP structure, modular service-layer architecture"
   ],
-  // videoUrl: "/assets/support-bot-demo.mp4",
-  // youtubeId: "GamgzJs4tzo",
-  // sourceCode: "Ask"
+
+  youtubeId: "VjqMXal_aEY",
+  sourceCode: "ask"
 },
-
-  {
-      title: "🏫 Youth Centre App + AI stats + AI Chatbot",
-      description: "A full-stack youth centre web application",
-      coreFeatures: [
-        "✅ User registration & login with role-based authentication",
-        "✅ Check-in system for users",
-        "✅ Admin panel with content management",
-        "✅ News feed management (create, edit, delete posts)",
-        "✅ Hero slider (upload and manage slides)",
-        "✅ Activity voting system",
-        "✅ Multiplayer quiz with Socket.io",
-        "✅ AI-powered statistics with charts",
-        "✅ AI chatbot for instant support and insights",
-      ],
-      tech: [
-        "TypeScript",
-        "Next.js",
-        "React",
-        "Tailwind CSS",
-        "Material UI",
-        "MongoDB + Mongoose",
-        "JWT Authentication",
-        "Socket.io (multiplayer quiz)",
-        "Recharts",
-        "OpenAI API (Chatbot + statistics-AI)",
-        "REST API routes",
-        "OOP structure",
-        "Admin panel",
-        "Role-based access control",
-      ],
-      // videoUrl: "/assets/youth-centre-demo.mp4",
-      youtubeId: "GamgzJs4tzo",
-      sourceCode: "ask",
-    },
-
-    {
-    title: "👟 E-commerce + AI stats + AI Chatbot",
-    description: "Perfume webstore with AI statistics and AI chatbot.",
-        coreFeatures: [
-      "✅ Products & Variants",
-      "✅ Checkout & Payment via Stripe",
-      "✅ Order Management for Admin",
-      "✅ Statistics with Graphs & AI",
-      "✅ AI-powered Chatbot",
-      "✅ Easy to add other payments like Klarna and swish",
-    ],
-    tech: [
-      "Javascript",
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-      "Stripe & Stripe CLI",
-      "Material UI",
-      "MongoDB + Mongoose",
-      "NextAuth (Auth system)",
-      "Recharts / Chart.js",
-      "OpenAI API (Chatbot + statistics-AI)",
-      "API routes (REST)",
-      "OOP",
-      "Adminpanel",
-      "inventory management",
-      "User management",
-      "product management",
-    ],
-    // videoUrl: "/assets/ecomerse-demo.mp4",
-    youtubeId: "KgEwT11yUOQ",
-    sourceCode: "ask"
-  },
-
-  
   {
   title: "🧠 AI Transcription & Editing Tool",
   description: "AI transcription tool for podcasts.",
@@ -151,40 +94,40 @@ export const projects: Project[] = [
   // videoUrl: "/assets/transcript-demo.mp4",
   youtubeId: "-npB2RgsW1E",
   sourceCode: "ask"
+//"https://github.com/PeterMolen/AI-Receipt-Analysis" // om jag vill visa sour code
 },
-
-{
-  title: "🧾 AI Receipt Analysis",
-  description: "OCR + AI automatically summarizes receipts.",
+    {
+  title: "AI-powered Customer Support System (upcoming)",
+  description: "An AI-driven full-stack customer support platform to automate FAQs, classify tickets, and escalate complex issues to human agents.",
   coreFeatures: [
-"✅ Capture receipt image with the in-app camera",
-"✅ Upload receipt image to backend via POST /analyze-receipt",
-"✅ AI analysis (OCR + GPT-4) to extract and structure receipt data",
-"✅ Display results in the app: store, date, and list of products with prices",
-"✅ Error handling with clear feedback if upload or analysis fails",
-],
-  tech: [
-    "JavaScript",
-    "React Native",
-    "Expo Go",
-    "Express",
-    "Node.js",
-    "MongoDB",
-    "Mongoose",
-    "GridFS",
-    "Ngrok",
-    "Multer",
-    "OpenAI API",
-    "Tesseract.js",
-    "HTML",
-    "CSS",
-    "dotenv",
-    "CORS",
+    "✅ Automated FAQ responses trained on company knowledge base",
+    "✅ Ticket classification (billing, technical, product, complaints)",
+    "✅ Escalation system with AI confidence scoring",
+    "✅ Dashboard for support team to manage tickets & AI suggestions",
+    "✅ User role-based access (admin, support agent)",
+    "✅ Logs & history of AI and human responses",
+    "✅ Analytics & insights on ticket trends",
+    "✅ Multi-channel integration (Email, Chat, Slack, WhatsApp)",
+    "✅ Continuous learning loop from human edits"
   ],
-  // videoUrl: "/assets/kvitto-demo.mp4",
-  youtubeId: "onzdu8CxDmo",
-  sourceCode: "https://github.com/PeterMolen/AI-Receipt-Analysis"
+  tech: [
+    "Python (Flask / FastAPI for backend AI API)",
+    "Javascript (Next.js) + React (frontend)",
+    "LLM ((Large Language Models)",
+    "NLP Natural Language Processing.",
+    "Data Import via CSV/JSON",
+    "Tailwind CSS, Daisy",
+    "MongoDB + Mongoose",
+    "JWT Authentication & role-based access control",
+    "Socket.io (for live chat integration)",
+    "Recharts (analytics & dashboards)",
+    "REST API routes",
+    "OOP structure",
+    "Edit chat theme your self",
+    "Admin panel for managing FAQ, settings"
+  ],
+  // videoUrl: "/assets/support-bot-demo.mp4",
+  // youtubeId: "GamgzJs4tzo",
+  // sourceCode: "Ask"
 },
-
-
 ];

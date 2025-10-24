@@ -28,19 +28,14 @@ export const ProjectCard = ({ project }: { project: Project }) => {
     scale: 1,
     opacity: 0,
     translateY: 20,
+    reflectionX: 50, // 🌞 solreflektionens position (x%)
+    reflectionY: 50, // 🌞 solreflektionens position (y%)
   });
 
-  // State för om videon ska visas inline eller bara thumbnail
   const [showVideo, setShowVideo] = useState(false);
 
-  // Hindra scroll i bakgrunden när video visas
   useEffect(() => {
-    if (showVideo) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    // Cleanup på unmount
+    document.body.style.overflow = showVideo ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -56,21 +51,22 @@ export const ProjectCard = ({ project }: { project: Project }) => {
 
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-
     const maxRotation = 10;
     const rotateX = ((centerY - y) / centerY) * maxRotation;
     const rotateY = ((x - centerX) / centerX) * maxRotation;
-
     const shadowX = ((x - centerX) / centerX) * 20;
     const shadowY = ((y - centerY) / centerY) * 20;
 
-    const highlight = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.15), transparent 80%)`;
-
     setStyle((prev) => ({
       ...prev,
-      transform: `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`,
-      boxShadow: `${-shadowX.toFixed(1)}px ${-shadowY.toFixed(1)}px 30px rgba(0,0,0,0.3)`,
-      background: highlight,
+      transform: `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(
+        2
+      )}deg)`,
+      boxShadow: `${-shadowX.toFixed(1)}px ${-shadowY.toFixed(
+        1
+      )}px 30px rgba(0,0,0,0.3)`,
+      reflectionX: (x / rect.width) * 100,
+      reflectionY: (y / rect.height) * 100,
     }));
   };
 
@@ -79,50 +75,51 @@ export const ProjectCard = ({ project }: { project: Project }) => {
       ...prev,
       transform: "rotateX(0deg) rotateY(0deg)",
       boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-      background: "none",
+      reflectionX: 50,
+      reflectionY: 50,
     }));
   };
 
-  // Scroll + fade-in + parallax
   useEffect(() => {
     const handleScroll = () => {
-  if (!cardRef.current) return;
-  const rect = cardRef.current.getBoundingClientRect();
-  const windowHeight = window.innerHeight;
-  const cardMiddle = rect.top + rect.height / 2;
-  const distanceFromCenter = Math.abs(windowHeight / 2 - cardMiddle);
-  const maxOffset = 30;
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const cardMiddle = rect.top + rect.height / 2;
+      const distanceFromCenter = Math.abs(windowHeight / 2 - cardMiddle);
+      const maxOffset = 30;
+      const yOffset = ((rect.top / windowHeight) - 0.5) * maxOffset;
+      const scale = 1 - Math.min(distanceFromCenter / windowHeight, 0.2);
+      const translateY =
+        20 -
+        Math.min(
+          20,
+          (1 - Math.min(distanceFromCenter / (windowHeight / 1.5), 1)) * 20
+        );
+      const fadeDistance = windowHeight * 0.4;
+      const opacity =
+        distanceFromCenter < fadeDistance
+          ? 1
+          : Math.max(
+              0,
+              1 -
+                (distanceFromCenter - fadeDistance) /
+                  (windowHeight - fadeDistance)
+            );
 
-  const yOffset = ((rect.top / windowHeight) - 0.5) * maxOffset;
-
-  const scale = 1 - Math.min(distanceFromCenter / windowHeight, 0.2);
-  const translateY = 20 - Math.min(20, (1 - Math.min(distanceFromCenter / (windowHeight / 1.5), 1)) * 20);
-
-  // Fade-in när kortet kommer in, men fördröjd fade-out när det lämnar
-  const fadeDistance = windowHeight * 0.4; // större värde = längre tid innan den börjar försvinna
-  const opacity =
-    distanceFromCenter < fadeDistance
-      ? 1 // helt opakt tills vi når slutet av scroll
-      : Math.max(0, 1 - (distanceFromCenter - fadeDistance) / (windowHeight - fadeDistance));
-
-  setStyle((prev) => ({
-    ...prev,
-    yOffset,
-    scale,
-    opacity,
-    translateY,
-  }));
-};
-
+      setStyle((prev) => ({
+        ...prev,
+        yOffset,
+        scale,
+        opacity,
+        translateY,
+      }));
+    };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setStyle((prev) => ({
-            ...prev,
-            opacity: 1,
-            translateY: 0,
-          }));
+          setStyle((prev) => ({ ...prev, opacity: 1, translateY: 0 }));
         }
       },
       { threshold: 0.3 }
@@ -137,11 +134,8 @@ export const ProjectCard = ({ project }: { project: Project }) => {
     };
   }, []);
 
-  // Funktion för att få YouTube thumbnail URL från youtubeId
   const getYoutubeThumbnail = (id: string) =>
     `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-
-  // YouTube embed URL
   const getYoutubeEmbedUrl = (id: string) =>
     `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
 
@@ -154,24 +148,66 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         display: "flex",
         flexDirection: "column",
         minHeight: 350,
-        backdropFilter: "blur(10px)",
-        backgroundColor: isDarkMode
-          ? "rgba(18,18,18,0.9)"
-          : "rgba(255,255,255,0.85)",
-        borderRadius: 3,
+        borderRadius: 4,
+        backdropFilter: "blur(14px) saturate(180%)",
+        background: isDarkMode
+          ? "linear-gradient(145deg, rgba(40,40,45,0.4), rgba(20,20,25,0.2))"
+          : "linear-gradient(145deg, rgba(255,255,255,0.4), rgba(255,255,255,0.15))",
+        border: "1px solid rgba(255,255,255,0.25)",
         transform: `${style.transform} translateY(${style.yOffset}px) scale(${style.scale}) translateY(${style.translateY}px)`,
-        transition: "transform 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease",
+        transition:
+          "transform 0.3s ease, box-shadow 0.4s ease, opacity 0.6s ease, border-color 0.3s ease",
         transformStyle: "preserve-3d",
         perspective: 1000,
-        boxShadow: style.boxShadow,
-        backgroundImage: style.background,
+        boxShadow: "0 8px 32px rgba(31,38,135,0.37)",
         position: "relative",
         overflow: "hidden",
         opacity: style.opacity,
+        "&:hover": {
+          boxShadow: "0 12px 45px rgba(31,38,135,0.6)",
+          borderColor: "rgba(255,255,255,0.45)",
+        },
+
+        // 🌞 realistisk solreflektion (ljusprick)
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: `radial-gradient(
+            circle at ${style.reflectionX}% ${style.reflectionY}%,
+            rgba(144, 238, 144, 0.35) 0%,    /* soft aurora green core */
+            rgba(0, 255, 128, 0.25) 10%,     /* vibrant green glow */
+            rgba(0, 206, 209, 0.18) 25%,     /* turquoise edge */
+            rgba(72, 61, 139, 0.12) 40%,     /* deep aurora blue */
+            transparent 70%
+          )`,
+          mixBlendMode: "screen",
+          opacity: 0,
+          transition: "opacity 0.5s ease, background 0.25s ease",
+          pointerEvents: "none",
+          filter: "blur(0.5px) saturate(120%) brightness(1)",
+        },
+        "&:hover::before": {
+          opacity: 1,
+        },
+
+
       }}
     >
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h5" color="primary" gutterBottom fontWeight={600}>
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 600,
+            background: "linear-gradient(90deg, #4fd1ff, #ff5bbd, #ff9350)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+          gutterBottom
+        >
           {project.title}
         </Typography>
 
@@ -199,47 +235,43 @@ export const ProjectCard = ({ project }: { project: Project }) => {
               size="small"
               color="primary"
               variant="outlined"
-              sx={{ mr: 0.5, mb: 0.5 }}
+              sx={{
+                mr: 0.5,
+                mb: 0.5,
+                backdropFilter: "blur(6px)",
+                backgroundColor: "rgba(255,255,255,0.08)",
+                borderColor: "rgba(255,255,255,0.2)",
+              }}
             />
           ))}
         </Stack>
       </CardContent>
 
-      {/* YouTube video handling */}
+      {/* 🎥 Video Section */}
       {project.youtubeId ? (
         <Box
           sx={{
             px: 2,
             position: "relative",
             cursor: "pointer",
-            borderRadius: 2,
+            borderRadius: 3,
             overflow: "hidden",
             userSelect: "none",
             aspectRatio: "16 / 9",
           }}
           onClick={() => !showVideo && setShowVideo(true)}
-          aria-label="Play video"
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              if (!showVideo) setShowVideo(true);
-            }
-          }}
         >
           {!showVideo ? (
             <>
               <img
                 src={getYoutubeThumbnail(project.youtubeId)}
-                alt={`${project.title} video thumbnail`}
+                alt={`${project.title} thumbnail`}
                 style={{
                   width: "100%",
                   borderRadius: 12,
                   display: "block",
-                  userSelect: "none",
                 }}
                 draggable={false}
-                loading="lazy"
               />
               <Box
                 sx={{
@@ -248,16 +280,12 @@ export const ProjectCard = ({ project }: { project: Project }) => {
                   left: "50%",
                   transform: "translate(-50%, -50%)",
                   color: "white",
-                  backgroundColor: "rgba(0,0,0,0.5)",
+                  backgroundColor: "rgba(0,0,0,0.4)",
                   borderRadius: "50%",
-                  padding: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  pointerEvents: "none",
+                  padding: "10px",
                 }}
               >
-                <PlayCircleOutlineIcon sx={{ fontSize: 48 }} />
+                <PlayCircleOutlineIcon sx={{ fontSize: 44 }} />
               </Box>
             </>
           ) : (
@@ -274,24 +302,21 @@ export const ProjectCard = ({ project }: { project: Project }) => {
                   right: 8,
                   zIndex: 10,
                   color: "white",
-                  backgroundColor: "rgba(0,0,0,0.5)",
-                  "&:hover": {
-                    backgroundColor: "rgba(0,0,0,0.7)",
-                  },
+                  backgroundColor: "rgba(0,0,0,0.4)",
+                  "&:hover": { backgroundColor: "rgba(0,0,0,0.6)" },
                 }}
               >
                 <CloseIcon />
               </IconButton>
               <iframe
-                loading="lazy"
                 width="100%"
                 height="100%"
                 src={getYoutubeEmbedUrl(project.youtubeId)}
-                title={`${project.title} YouTube video player`}
+                title={`${project.title} video`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 style={{ borderRadius: 12 }}
-              ></iframe>
+              />
             </>
           )}
         </Box>
@@ -303,62 +328,52 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         />
       )}
 
-<CardActions
-  sx={{
-    px: 2,
-    pt: 2,
-    display: "flex",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: 1,
-  }}
->
-  {project.liveDemo && (
-    <Button
-      size="small"
-      component="a"
-      href={project.liveDemo}
-      target="_blank"
-      rel="noopener noreferrer"
-      color="primary"
-      variant="contained"
-    >
-      Live Demo
-    </Button>
-  )}
+      <CardActions
+        sx={{
+          px: 2,
+          pt: 2,
+          display: "flex",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 1,
+        }}
+      >
+        {project.liveDemo && (
+          <Button
+            size="small"
+            component="a"
+            href={project.liveDemo}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="primary"
+            variant="contained"
+          >
+            Live Demo
+          </Button>
+        )}
 
-{project.sourceCode && (
-  project.sourceCode === "ask" ? (
-    <Button
-      size="small"
-      disabled
-      variant="outlined"
-      sx={{
-        fontWeight: 700,              
-        color: "#6a1b9a !important",     
-        borderColor: "#6a1b9a !important",
-        fontStyle: "normal !important"   
-      }}
-    >
-      Ask for the source code
-    </Button>
-  ) : (
-    <Button
-      size="small"
-      component="a"
-      href={project.sourceCode}
-      target="_blank"
-      rel="noopener noreferrer"
-      color="primary"
-      variant="outlined"
-    >
-      Source Code
-    </Button>
-  )
-)}
-</CardActions>
-
+        {project.sourceCode && (
+          <Button
+            size="small"
+            component="a"
+            href={project.sourceCode === "ask" ? undefined : project.sourceCode}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="primary"
+            variant={project.sourceCode === "ask" ? "outlined" : "outlined"}
+            disabled={project.sourceCode === "ask"}
+            sx={{
+              fontWeight: 700,
+              color: project.sourceCode === "ask" ? "#6a1b9a" : "inherit",
+              borderColor: "#6a1b9a",
+            }}
+          >
+            {project.sourceCode === "ask"
+              ? "Ask for the source code"
+              : "Source Code"}
+          </Button>
+        )}
+      </CardActions>
     </Card>
   );
 };
-
