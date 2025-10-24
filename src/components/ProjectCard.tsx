@@ -138,8 +138,8 @@ export const ProjectCard = ({ project }: { project: Project }) => {
           position: "relative",
           transition: "max-height 0.5s ease",
           ...(isMobile && {
-            maxHeight: expanded ? "800px" : "600px",
-            overflow: "hidden",
+              maxHeight: expanded ? "none" : "600px",
+              overflow: expanded ? "visible" : "hidden",
           }),
         }}
       >
@@ -269,20 +269,28 @@ export const ProjectCard = ({ project }: { project: Project }) => {
 
         <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
           {project.tech.map((techItem, i) => (
-            <Chip
-              key={i}
-              label={techItem}
-              size="small"
-              color="primary"
-              variant="outlined"
-              sx={{
-                mr: 0.5,
-                mb: 0.5,
-                backdropFilter: "blur(6px)",
-                backgroundColor: "rgba(255,255,255,0.08)",
-                borderColor: "rgba(255,255,255,0.2)",
-              }}
-            />
+          <Chip
+            key={i}
+            label={techItem}
+            size="small"
+            color="primary"
+            variant="outlined"
+            sx={{
+              mr: 0.5,
+              mb: 0.5,
+              backdropFilter: "blur(6px)",
+              backgroundColor: "rgba(255,255,255,0.08)",
+              borderColor: "rgba(255,255,255,0.2)",
+              maxWidth: "100%", // 👈 hindrar chippen från att bli bredare än kortet
+              "& .MuiChip-label": {
+                whiteSpace: "normal",     // 👈 låter texten brytas
+                wordBreak: "break-word",  // 👈 tvingar radbrytning på långa ord
+                overflowWrap: "anywhere",
+                lineHeight: 1.2,
+                textAlign: "center",
+              },
+            }}
+          />
           ))}
         </Stack>
 
