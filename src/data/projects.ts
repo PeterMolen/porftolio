@@ -11,9 +11,9 @@ export interface Project {
 
 export const projects: Project[] = [
 {
-  title: "Foodaify — a scalable AI-first B2B/B2C SaaS, food ordering & restaurant platform",
+  title: "Foodaify — AI, food ordering & restaurant platform",
   description:
-    "A complete, database-driven food ordering system for restaurants featuring the AI assistant (AIVA), foodaify Phone, traditional checkout, OCR-powered menu scanning, geolocation-based restaurant search, real-time order management, and a powerful admin dashboard.",
+    "A scalable AI-first B2B/B2C SaaS, a complete, database-driven food ordering system for restaurants featuring the AI assistant (AIVA), foodaify Phone, traditional checkout, OCR-powered menu scanning, geolocation-based restaurant search, real-time order management, and a powerful admin dashboard.",
 
   coreFeatures: [
     "✅ Customer can choose Classic Checkout, Orderbot checkout or call the restaurant through us",

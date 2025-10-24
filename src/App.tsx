@@ -361,24 +361,77 @@ function App() {
         </Container>
 
         {/* Projects */}
-        <Container maxWidth="lg" component="main" id="projects" sx={{ mb: 16 }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 4,
-              width: "100%",
-              maxWidth: "900px",
-              mx: "auto",
-            }}
-          >
-            {projects.map((project) => (
-              <Box key={project.title} sx={{ width: "100%" }}>
-                <ProjectCard project={project} />
-              </Box>
-            ))}
-          </Box>
-        </Container>
+<Container maxWidth="lg" component="main" id="projects" sx={{ mb: 16 }}>
+{isMobile ? (
+  <Box sx={{ mt: 2 }}>
+    {/* 👇 Lägg till denna lilla text ovanför korten */}
+    <Typography
+      variant="body2"
+      sx={{
+        textAlign: "center",
+        mb: 2,
+        opacity: 0.8,
+        fontStyle: "italic",
+        fontSize: 14,
+        animation: "pulse 2s infinite",
+        "@keyframes pulse": {
+          "0%, 100%": { opacity: 0.6 },
+          "50%": { opacity: 1 },
+        },
+      }}
+    >
+      👉 Swipe sideways to explore more projects →
+    </Typography>
+
+    {/* 🔹 Själva scrollbaren */}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        overflowX: "auto",
+        scrollSnapType: "x mandatory",
+        gap: 3,
+        pb: 2,
+        px: 2,
+        mx: -2,
+        "&::-webkit-scrollbar": { display: "none" },
+      }}
+    >
+      {projects.map((project) => (
+        <Box
+          key={project.title}
+          sx={{
+            flex: "0 0 105%", // bredd per kort
+            scrollSnapAlign: "start",
+            borderRadius: 2,
+          }}
+        >
+          <ProjectCard project={project} />
+        </Box>
+      ))}
+    </Box>
+  </Box>
+  ) : (
+    // 💻 Desktop-vy (oförändrad)
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        width: "100%",
+        maxWidth: "900px",
+        mx: "auto",
+      }}
+    >
+      {projects.map((project) => (
+        <Box key={project.title} sx={{ width: "100%" }}>
+          <ProjectCard project={project} />
+        </Box>
+      ))}
+    </Box>
+  )}
+</Container>
+
 
         {/* Footer */}
         <Box
