@@ -20,46 +20,64 @@ import {
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 
-import { TypeAnimation } from "react-type-animation";
-import { motion, AnimatePresence } from "framer-motion";
-
 function App() {
-  // State för dark mode
   const [darkMode, setDarkMode] = useState(false);
-
-  // Nytt state för att styra vilken bild som visas i animationen
-  const [current, setCurrent] = useState("foodaify");
-
+  const [current, setCurrent] = useState<"transcription" | "foodaify" | "aicss">("foodaify");
   const [cgptQuote, setCgptQuote] = useState("");
 
-const cgptQuotes = [
-  "You're thinking like a true system architect – the big picture first, details later.",
-  "That's AI-architect level – you're not just thinking how, but why.",
-  "You're coding like a senior full-stack developer – clean, efficient, and built for the future.",
-  "That’s the mindset of a true DevOps pro – eliminating bottlenecks before they even appear.",
-  "That’s exactly the kind of startup energy that drives innovation forward.",
-  "Exactly – you're reasoning like a data-driven analyst, letting the numbers speak.",
-  "That’s pure engineer-brain mode – logical, efficient, and sharply prioritized.",
-];
+  const IMAGE_FRAME_W = 220; // px
+  const IMAGE_FRAME_H = 200; // px
 
-useEffect(() => {
-  const updateQuote = () => {
-    const random = Math.floor(Math.random() * cgptQuotes.length);
-    setCgptQuote(cgptQuotes[random]);
-  };
-  updateQuote();
-  const interval = setInterval(updateQuote, 5000); // Byt citat varje sekund
-  return () => clearInterval(interval);
-}, []);
+  const cgptQuotes = [
+    "You're thinking like a true system architect – the big picture first, details later.",
+    "That's AI-architect level – you're not just thinking how, but why.",
+    "You're coding like a senior full-stack developer – clean, efficient, and built for the future.",
+    "That’s the mindset of a true DevOps pro – eliminating bottlenecks before they even appear.",
+    "That’s exactly the kind of startup energy that drives innovation forward.",
+    "Exactly – you're reasoning like a data-driven analyst, letting the numbers speak.",
+    "That’s pure engineer-brain mode – logical, efficient, and sharply prioritized.",
+  ];
 
-  // Bildmap
-  const images: Record<string, string> = {
+  useEffect(() => {
+    const updateQuote = () => {
+      const random = Math.floor(Math.random() * cgptQuotes.length);
+      setCgptQuote(cgptQuotes[random]);
+    };
+    updateQuote();
+    const interval = setInterval(updateQuote, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const images: Record<"transcription" | "foodaify" | "aicss", string> = {
     transcription: "/images/transcription.png",
     foodaify: "/images/foodaify.png",
-    aicss: "/images/aicss.png"
+    aicss: "/images/aicss.png",
   };
 
-  // Spara dark mode i localStorage och läs initialt
+  // 🔁 Enkelt bildspel (utan att ta bort/lägga till img-element)
+  useEffect(() => {
+    const order: Array<"transcription" | "foodaify" | "aicss"> = [
+      "transcription",
+      "foodaify",
+      "aicss",
+    ];
+    let i = order.indexOf(current);
+    const id = setInterval(() => {
+      i = (i + 1) % order.length;
+      setCurrent(order[i]);
+    }, 3000);
+    return () => clearInterval(id);
+  }, [current]);
+
+  // Förladda
+  useEffect(() => {
+    Object.values(images).forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  // Dark mode
   useEffect(() => {
     const saved = localStorage.getItem("darkMode");
     if (saved) {
@@ -69,116 +87,57 @@ useEffect(() => {
       setDarkMode(prefersDark);
     }
   }, []);
-
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode ? "true" : "false");
   }, [darkMode]);
 
-  // Skapa themes
   const lightTheme = createTheme({
     palette: {
       mode: "light",
-      primary: {
-        main: "#6a1b9a",
-      },
-      background: {
-        default: "#f3e5f5",
-        paper: "#fff",
-      },
-      text: {
-        primary: "#000",
-        secondary: "#555",
-      },
+      primary: { main: "#6a1b9a" },
+      background: { default: "#f3e5f5", paper: "#fff" },
+      text: { primary: "#000", secondary: "#555" },
     },
-    typography: {
-      fontFamily: "'Inter', sans-serif",
-    },
+    typography: { fontFamily: "'Inter', sans-serif" },
   });
 
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
-      primary: {
-        main: "#ce93d8",
-      },
-      background: {
-        default: "#0A0F1C", //mörkblå
-        paper: "#fff",
-      },
-      text: {
-        primary: "#fff",
-        secondary: "#ddd",
-      },
+      primary: { main: "#ce93d8" },
+      background: { default: "#0A0F1C", paper: "#fff" },
+      text: { primary: "#fff", secondary: "#ddd" },
     },
-    typography: {
-      fontFamily: "'Inter', sans-serif",
-    },
+    typography: { fontFamily: "'Inter', sans-serif" },
   });
 
   const theme = darkMode ? darkTheme : lightTheme;
-
-  // Media query för mobil (om du vill)
   const isMobile = useMediaQuery("(max-width:960px)");
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* 🌞 / 🌌 Bakgrundseffekt i övre vänstra hörnet */}
-<Box
-  sx={{
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: 420,
-    height: 420,
-    pointerEvents: "none",
-    zIndex: 0,
-    filter: "blur(50px)",
-    opacity: darkMode ? 0.65 : 0.4, // 🔥 starkare norrsken, mjukare sol
-    transition: "opacity 1.5s ease, background 1.5s ease",
 
-    // 🎨 Färger och ljusbalans
-    background: darkMode
-      ? `
-        radial-gradient(circle at 20% 20%,
-          rgba(0, 255, 191, 0.45) 0%,
-          rgba(0, 191, 255, 0.4) 25%,
-          rgba(50, 205, 50, 0.35) 55%,
-          rgba(72, 61, 139, 0.3) 85%,
-          transparent 100%
-        )
-      `
-      : `
-        radial-gradient(circle at 20% 20%,
-          #fff59d 0%,
-          #ffdd55 25%,
-          #ffb347 55%,
-          rgba(255, 153, 51, 0.3) 80%,
-          transparent 100%
-        )
-      `,
+      {/* Bakgrundseffekt */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: 420,
+          height: 420,
+          pointerEvents: "none",
+          zIndex: 0,
+          filter: "blur(50px)",
+          opacity: darkMode ? 0.65 : 0.4,
+          transition: "opacity 1.5s ease, background 1.5s ease",
+          background: darkMode
+            ? `radial-gradient(circle at 20% 20%, rgba(0,255,191,0.45) 0%, rgba(0,191,255,0.4) 25%, rgba(50,205,50,0.35) 55%, rgba(72,61,139,0.3) 85%, transparent 100%)`
+            : `radial-gradient(circle at 20% 20%, #fff59d 0%, #ffdd55 25%, #ffb347 55%, rgba(255,153,51,0.3) 80%, transparent 100%)`,
+        }}
+      />
 
-    animation: darkMode
-      ? "auroraFlow 14s ease-in-out infinite alternate"
-      : "sunPulse 8s ease-in-out infinite alternate",
-
-    // 🔮 Rörelseanimationer
-    "@keyframes auroraFlow": {
-      "0%": { transform: "translate(0, 0) scale(1)", filter: "blur(45px)" },
-      "50%": {
-        transform: "translate(25px, -15px) scale(1.08)",
-        filter: "blur(55px)",
-      },
-      "100%": { transform: "translate(0, 0) scale(1)", filter: "blur(45px)" },
-    },
-    "@keyframes sunPulse": {
-      "0%": { opacity: 0.35 },
-      "100%": { opacity: 0.5 },
-    },
-  }}
-/>
-
-      {/* Dark mode knapp centrerad högst upp */}
+      {/* Dark mode knapp */}
       <Box
         sx={{
           position: "fixed",
@@ -212,47 +171,45 @@ useEffect(() => {
           userSelect: "none",
         }}
       >
-{/* Höger bakgrundsbild */}
-{!isMobile && (
-  <Box
-    sx={{
-      position: "fixed",
-      top: 0,
-      right: 0,
-      width: { xs: "40%", md: "30%" },
-      height: "60vh",
-      backgroundImage: `url(${mainImg})`,
-      backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",
-      opacity: 1,
-      pointerEvents: "none",
-      zIndex: 0,
-    }}
-  />
-)}
+        {/* Bakgrundsbilder */}
+        {!isMobile && (
+          <Box
+            sx={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              width: { xs: "40%", md: "30%" },
+              height: "60vh",
+              backgroundImage: `url(${mainImg})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              pointerEvents: "none",
+              zIndex: 0,
+            }}
+          />
+        )}
 
-{/* Vänster bakgrundsbild */}
-{!isMobile && (
-  <Box
-    sx={{
-      position: "fixed",
-      top: "66%", // Vertikal mitt
-      left: 0,
-      width: { xs: "40%", md: "22%" },
-      height: "60vh", // Justera höjden efter behov
-      backgroundImage: `url(${main2})`,
-      backgroundSize: "contain",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",
-      transform: "translateY(-50%)",
-      pointerEvents: "none",
-      opacity: 1,
-      zIndex: 0,
-    }}
-  />
-)}
-        <Container maxWidth="md" sx={{ mb: 16, textAlign: "center" }}>
+        {!isMobile && (
+          <Box
+            sx={{
+              position: "fixed",
+              top: "66%",
+              left: 0,
+              width: { xs: "40%", md: "22%" },
+              height: "60vh",
+              backgroundImage: `url(${main2})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              transform: "translateY(-50%)",
+              pointerEvents: "none",
+              zIndex: 0,
+            }}
+          />
+        )}
+
+        <Container maxWidth="xl" sx={{ mb: 16, textAlign: "center" }}>
           <Typography
             variant="h2"
             component="h1"
@@ -260,163 +217,112 @@ useEffect(() => {
             gutterBottom
             sx={{
               fontSize: { xs: "3rem", md: "4rem" },
-              textShadow: darkMode
-                ? "0 2px 8px rgba(255, 255, 255, 0.3)"
-                : "0 2px 5px rgba(0,0,0,0.2)",
               mb: 2,
-              color: "text.primary",
             }}
           >
-            𖡎 My AI Portfolio 
+            𖡎 My AI Portfolio
           </Typography>
 
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            sx={{ maxWidth: 600, mx: "auto", mb: 2, fontFamily: "'Montserrat', sans-serif" }}
-          >
+          <Typography variant="h5" sx={{ mb: 2 }}>
             Cutting-edge AI projects with futuristic design and modern tech.
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ mb: 6, fontSize: 18 }}>
+            Educated in C# and AI but codes in any language.
           </Typography>
 
           <Typography
             variant="subtitle1"
-            color="text.secondary"
-            sx={{ maxWidth: 600, mx: "auto", mb: 6, fontSize: 18, }}
+            sx={{
+              mb: 6,
+              fontSize: 18,
+              fontStyle: "italic",
+              color: darkMode ? "#ffb347" : "#00bcd4",
+            }}
           >
-            Educated in C# and AI but codes in any language.
+            According to CGPT: {cgptQuote}
           </Typography>
-
-<AnimatePresence mode="wait">
-  <motion.div
-    key={cgptQuote} // viktigt för att trigga animation vid byte
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.6, ease: "easeInOut" }}
-  >
-    <Typography
-      variant="subtitle1"
-      sx={{
-        maxWidth: 600,
-        mx: "auto",
-        mb: 6,
-        fontSize: 18,
-        fontStyle: "italic",
-        textAlign: "center",
-        color: darkMode ? "#ffb347" : "#00bcd4", // 🔥 orange (dark) / cyan (light)
-        textShadow: darkMode
-          ? "0 0 10px rgba(255,179,71,0.6)" // mjukt orange glow
-          : "0 0 10px rgba(0,188,212,0.4)", // mjukt cyan glow
-        transition: "color 0.6s ease, text-shadow 0.6s ease",
-      }}
-    >
-      According to CGPT: {cgptQuote}
-    </Typography>
-  </motion.div>
-</AnimatePresence>
-
-
-
 
           <Typography
             variant="overline"
-            color="text.primary"
-            sx={{ maxWidth: 600, mx: "auto", mb: 4,  fontSize: 14,  }}
+            sx={{ mb: 4, fontSize: 14, display: "block" }}
           >
-            My projects: 
+            My projects:
           </Typography>
-  
-          
 
-          {/* Ny animation med bilder */}
-          <Box
-          
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 2,
-              mx: "auto",
-              mb: 4,
-              maxWidth: 400,
-              color: theme.palette.primary.main,
-              fontWeight: 700,
-              fontSize: { xs: "1rem", md: "1.3rem" },
-              userSelect: "none",
-            }}
-          >
-            {/* Dold text som styr animationen */}
-            <TypeAnimation
-              sequence={[
-                2000,
-                () => setCurrent("transcription"),
-                2000,
-                () => setCurrent("foodaify"),
-                2000,
-                () => setCurrent("aicss"),
-                
-              ]}
-              repeat={Infinity}
-              speed={1}
-              cursor={false}
-              preRenderFirstString
-              wrapper="span"
-              style={{ display: "none" }}
-            />
-
-            {/* Bild visas istället för text */}
-<img
-  src={images[current]}
-  alt={current}
-  style={{
-    width: 200,
-    height: "auto",
-    marginTop: "12px",
-    borderRadius: 18,
+          {/* ✅ Bildspel utan minsta layout-hopp */}
+<Box
+  sx={{
+    position: "relative",
+    width: IMAGE_FRAME_W,
+    height: IMAGE_FRAME_H,
+    mx: "auto",
+    mb: 4,
+    borderRadius: 3,
+    overflow: "hidden",
     border: `3px solid ${
-      darkMode ? "rgba(206,147,216,0.6)" : "rgba(106,27,154,0.4)"
+      darkMode
+        ? "rgba(206,147,216,0.6)"
+        : "rgba(106,27,154,0.4)"
     }`,
     boxShadow: darkMode
-      ? "0 8px 20px rgba(206, 147, 216, 0.4), inset 0 0 15px rgba(206,147,216,0.2)"
-      : "0 8px 20px rgba(106, 27, 154, 0.3), inset 0 0 15px rgba(106,27,154,0.15)",
-    transition: "transform 0.35s ease, box-shadow 0.35s ease",
-    cursor: "default",
-  }}
-  onMouseEnter={(e) => {
-    e.currentTarget.style.transform = "translateY(-6px) scale(1.05)";
-    e.currentTarget.style.boxShadow = darkMode
-      ? "0 12px 28px rgba(206, 147, 216, 0.7), inset 0 0 20px rgba(206,147,216,0.3)"
-      : "0 12px 28px rgba(106, 27, 154, 0.6), inset 0 0 20px rgba(106,27,154,0.25)";
-  }}
-  onMouseLeave={(e) => {
-    e.currentTarget.style.transform = "translateY(0px) scale(1)";
-    e.currentTarget.style.boxShadow = darkMode
-      ? "0 8px 20px rgba(206, 147, 216, 0.4), inset 0 0 15px rgba(206,147,216,0.2)"
-      : "0 8px 20px rgba(106, 27, 154, 0.3), inset 0 0 15px rgba(106,27,154,0.15)";
-  }}
-/>
+      ? "0 8px 20px rgba(206,147,216,0.4)"
+      : "0 8px 20px rgba(106,27,154,0.3)",
+    backgroundColor: "#000",
+    flexShrink: 0,
 
-          
+    // 🧱 HÅRD LAYOUT-LÅSNING (fixar höjd-hopp)
+    minHeight: `${IMAGE_FRAME_H}px`,
+    maxHeight: `${IMAGE_FRAME_H}px`,
+    lineHeight: 0,
+    display: "block",
+  }}
+>
 
-            {/* Knapp under animationen */}
-            <Button
-              variant="contained"
-              color="primary"
-              href="#projects"
-              size="large"
-              sx={{
-                px: 5,
-                py: 1.5,
-                fontWeight: 600,
-                boxShadow: 3,
-                width: "100%",
-              }}
-            >
-              Explore Projects
-            </Button>
+            {/* Alla tre bilder ligger ovanpå varandra – bara opacity växlar */}
+            {(
+              Object.keys(images) as Array<"transcription" | "foodaify" | "aicss">
+            ).map((key) => (
+              <img
+                key={key}
+                src={images[key]}
+                alt={key}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",       
+                  objectPosition: "center",
+                  display: "block",
+                  transition: "opacity 450ms ease-in-out",
+                  opacity: current === key ? 1 : 0, // 🔁 Växla synlighet
+                  pointerEvents: "none",
+                }}
+              />
+            ))}
           </Box>
+
+          <Button
+            variant="contained"
+            color="primary"
+            href="#projects"
+            size="large"
+            sx={{
+              px: 5,
+              py: 1.5,
+              fontWeight: 600,
+              boxShadow: 3,
+              width: "100%",
+              maxWidth: IMAGE_FRAME_W,
+              mx: "auto",
+            }}
+          >
+            Explore Projects
+          </Button>
         </Container>
 
+        {/* Projects */}
         <Container maxWidth="lg" component="main" id="projects" sx={{ mb: 16 }}>
           <Box
             sx={{
@@ -436,6 +342,7 @@ useEffect(() => {
           </Box>
         </Container>
 
+        {/* Footer */}
         <Box
           component="footer"
           id="contact"
@@ -444,14 +351,13 @@ useEffect(() => {
             textAlign: "center",
             fontSize: "0.875rem",
             color: "text.secondary",
-            userSelect: "none",
           }}
         >
-          &copy; 2025 Peter’s AI Portfolio. All rights reserved. 
+          &copy; 2025 Peter’s AI Portfolio. All rights reserved.
           <br />
           Contact me at:{" "}
           <a
-            href="mailto:your.email@example.com"
+            href="mailto:pmolen.swe@gmail.com"
             style={{ color: theme.palette.primary.main }}
           >
             pmolen.swe@gmail.com
