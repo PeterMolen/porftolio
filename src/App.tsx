@@ -209,46 +209,84 @@ function App() {
           />
         )}
 
-        <Container maxWidth="xl" sx={{ mb: 16, textAlign: "center" }}>
-          <Typography
-            variant="h2"
-            component="h1"
-            fontWeight={800}
-            gutterBottom
-            sx={{
-              fontSize: { xs: "3rem", md: "4rem" },
-              mb: 2,
-            }}
-          >
-            𖡎 My AI Portfolio
-          </Typography>
+        <Container
+  maxWidth="md"
+  sx={{
+    mb: 16,
+    textAlign: "center",
+    position: "relative",
+    zIndex: 2, // 🧱 ser till att texten ligger ovanpå bilderna
+  }}
+>
+  <Typography
+    variant="h2"
+    component="h1"
+    fontWeight={800}
+    gutterBottom
+    sx={{
+      fontSize: { xs: "3rem", md: "4rem" },
+      mb: 2,
+      wordWrap: "break-word", // ✅ bryt långa ord
+      overflowWrap: "break-word",
+      whiteSpace: "normal", // ✅ förhindra textoverflow
+    }}
+  >
+    𖡎 My AI Portfolio
+  </Typography>
 
-          <Typography variant="h5" sx={{ mb: 2 }}>
-            Cutting-edge AI projects with futuristic design and modern tech.
-          </Typography>
+  <Typography
+    variant="h5"
+    sx={{
+      mb: 2,
+      maxWidth: "600px", // ✅ förhindra för långa rader
+      mx: "auto", // centrera texten
+      lineHeight: 1.4,
+      wordWrap: "break-word",
+    }}
+  >
+    Cutting-edge AI projects with futuristic design and modern tech.
+  </Typography>
 
-          <Typography variant="subtitle1" sx={{ mb: 6, fontSize: 18 }}>
-            Educated in C# and AI but codes in any language.
-          </Typography>
+  <Typography
+    variant="subtitle1"
+    sx={{
+      mb: 6,
+      fontSize: 18,
+      maxWidth: "600px",
+      mx: "auto",
+      lineHeight: 1.4,
+      whiteSpace: "normal",
+    }}
+  >
+    Educated in C# and AI but codes in any language.
+  </Typography>
 
-          <Typography
-            variant="subtitle1"
-            sx={{
-              mb: 6,
-              fontSize: 18,
-              fontStyle: "italic",
-              color: darkMode ? "#ffb347" : "#00bcd4",
-            }}
-          >
-            According to CGPT: {cgptQuote}
-          </Typography>
+  <Typography
+    variant="subtitle1"
+    sx={{
+      mb: 6,
+      fontSize: 18,
+      fontStyle: "italic",
+      color: darkMode ? "#ffb347" : "#00bcd4",
+      maxWidth: "600px",
+      mx: "auto",
+    }}
+  >
+    According to CGPT: {cgptQuote}
+  </Typography>
 
-          <Typography
-            variant="overline"
-            sx={{ mb: 4, fontSize: 14, display: "block" }}
-          >
-            My projects:
-          </Typography>
+  <Typography
+    variant="overline"
+    sx={{
+      mb: 4,
+      fontSize: 14,
+      display: "block",
+      letterSpacing: 2,
+    }}
+  >
+    My projects:
+  </Typography>
+
 
           {/* ✅ Bildspel utan minsta layout-hopp */}
 <Box
